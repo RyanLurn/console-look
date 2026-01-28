@@ -1,9 +1,9 @@
 import { parseInputs } from "#components/parse-inputs";
 import { validateInputs } from "#components/validate-inputs";
+import { runCommand } from "#components/run-command";
 
-const { command, options } = parseInputs();
-console.log("Options:", options);
+const inputs = parseInputs();
 
-const processedInputs = validateInputs({ command, options });
+const validInputs = validateInputs(inputs);
 
-console.log("Processed inputs:", processedInputs);
+await runCommand(validInputs.command);
