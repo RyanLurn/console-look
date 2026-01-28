@@ -1,0 +1,18 @@
+{
+  "name": "@console-look/validators",
+  "type": "module",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@console-look/tsconfigs": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}

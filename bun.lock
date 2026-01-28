@@ -40,6 +40,17 @@
     "packages/tsconfigs": {
       "name": "@console-look/tsconfigs",
     },
+    "packages/validators": {
+      "name": "@console-look/validators",
+      "dependencies": {
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@console-look/tsconfigs": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
   },
   "catalog": {
     "typescript": "^5.9.3",
@@ -56,6 +67,8 @@
     "@console-look/cli": ["@console-look/cli@workspace:apps/cli"],
 
     "@console-look/tsconfigs": ["@console-look/tsconfigs@workspace:packages/tsconfigs"],
+
+    "@console-look/validators": ["@console-look/validators@workspace:packages/validators"],
 
     "@console-look/web": ["@console-look/web@workspace:apps/web"],
 
