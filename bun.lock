@@ -26,6 +26,14 @@
         "typescript": "catalog:",
       },
     },
+    "apps/web": {
+      "name": "@console-look/web",
+      "devDependencies": {
+        "@console-look/tsconfigs": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/tsconfigs": {
       "name": "@console-look/tsconfigs",
     },
@@ -44,6 +52,8 @@
     "@console-look/cli": ["@console-look/cli@workspace:apps/cli"],
 
     "@console-look/tsconfigs": ["@console-look/tsconfigs@workspace:packages/tsconfigs"],
+
+    "@console-look/web": ["@console-look/web@workspace:apps/web"],
 
     "@types/bun": ["@types/bun@1.3.7", "", { "dependencies": { "bun-types": "1.3.7" } }, "sha512-lmNuMda+Z9b7tmhA0tohwy8ZWFSnmQm1UDWXtH5r9F7wZCfkeO3Jx7wKQ1EOiKq43yHts7ky6r8SDJQWRNupkA=="],
 
