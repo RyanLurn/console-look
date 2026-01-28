@@ -21,6 +21,7 @@
     "apps/cli": {
       "name": "@console-look/cli",
       "dependencies": {
+        "@console-look/validators": "workspace:*",
         "zod": "catalog:",
       },
       "devDependencies": {
