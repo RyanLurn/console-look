@@ -1,4 +1,4 @@
-import { DELIMITER } from "#utils/constants";
+import { DEFAULT_OPTIONS, DELIMITER } from "#utils/constants";
 import { printUsage } from "#utils/print-usage";
 import { parseArgs } from "util";
 
@@ -9,7 +9,7 @@ export function parseInputs() {
   if (delimiterIndex === -1) {
     return {
       command: [...args],
-      options: {},
+      options: DEFAULT_OPTIONS,
     };
   }
 
@@ -29,7 +29,7 @@ function parseOptions(cliArgs: string[]) {
     args: cliArgs,
     options: {
       title: { type: "string", short: "t" },
-      stream: { type: "boolean", short: "s", default: true },
+      stream: { type: "boolean", short: "s", default: DEFAULT_OPTIONS.stream },
     },
     strict: true,
     allowPositionals: true,
