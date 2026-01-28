@@ -1,15 +1,3 @@
-# console-look
+# Console Look
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.7. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+Console Look captures terminal output (stdout / stderr), stores it remotely, and gives you a shareable URL to view logs across machines — even when your terminal can’t scroll far enough.
