@@ -1,7 +1,7 @@
 import { CliInputsSchema } from "#cli-inputs";
 import * as z from "zod";
 
-export const SessionIdSchema = z.string().brand<"SessionId">();
+export const SessionIdSchema = z.uuidv7().brand<"SessionId">();
 
 export const SessionSchema = z.object({
   ...CliInputsSchema.shape,
