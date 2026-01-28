@@ -13,7 +13,7 @@ export const TitleOptionSchema = z
 
 export const CliOptionsSchema = z.object({
   title: TitleOptionSchema.optional(),
-  stream: z.boolean().default(DEFAULT_CLI_OPTIONS.stream),
+  "no-stream": z.boolean().default(DEFAULT_CLI_OPTIONS["no-stream"]),
 });
 
 export type CliOptions = z.infer<typeof CliOptionsSchema>;
