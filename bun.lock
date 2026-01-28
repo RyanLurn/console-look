@@ -12,6 +12,10 @@
     },
     "apps/api": {
       "name": "@console-look/api",
+      "dependencies": {
+        "@console-look/validators": "workspace:*",
+        "zod": "catalog:",
+      },
       "devDependencies": {
         "@console-look/tsconfigs": "workspace:*",
         "@types/bun": "catalog:types",
