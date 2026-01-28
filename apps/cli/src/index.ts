@@ -1,8 +1,9 @@
 import { parseInputs } from "#components/parse-inputs";
-import { processInputs } from "#components/process-inputs";
+import { validateInputs } from "#components/validate-inputs";
 
 const { command, options } = parseInputs();
+console.log("Options:", options);
 
-const processedInputs = processInputs({ command, options });
+const processedInputs = validateInputs({ command, options });
 
 console.log("Processed inputs:", processedInputs);

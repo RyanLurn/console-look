@@ -8,7 +8,7 @@
     "#*": "./src/*.ts"
   },
   "exports": {
-    "./constants": "./src/constants.ts",
+    "./constants": "./src/utils/constants.ts",
     "./cli-inputs": "./src/cli-inputs.ts"
   },
   "dependencies": {

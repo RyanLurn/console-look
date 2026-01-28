@@ -1,5 +1,6 @@
-import { DEFAULT_OPTIONS, DELIMITER } from "#utils/constants";
+import { DELIMITER } from "#utils/constants";
 import { printUsage } from "#utils/print-usage";
+import { DEFAULT_CLI_OPTIONS } from "@console-look/validators/constants";
 import { parseArgs } from "util";
 
 export function parseInputs() {
@@ -7,9 +8,19 @@ export function parseInputs() {
   const delimiterIndex = args.indexOf(DELIMITER);
 
   if (delimiterIndex === -1) {
+    const command = [...args];
+
+    if (
+      command.length === 1 &&
+      (command[0] === "--help" || command[0] === "-h")
+    ) {
+      printUsage();
+      process.exit(0);
+    }
+
     return {
-      command: [...args],
-      options: DEFAULT_OPTIONS,
+      command,
+      options: DEFAULT_CLI_OPTIONS,
     };
   }
 
@@ -29,7 +40,11 @@ function parseOptions(cliArgs: string[]) {
     args: cliArgs,
     options: {
       title: { type: "string", short: "t" },
-      stream: { type: "boolean", short: "s", default: DEFAULT_OPTIONS.stream },
+      stream: {
+        type: "boolean",
+        short: "s",
+        default: DEFAULT_CLI_OPTIONS.stream,
+      },
     },
     strict: true,
     allowPositionals: true,

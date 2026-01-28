@@ -3,19 +3,8 @@ import { printUsage } from "#utils/print-usage";
 import { CliInputsSchema } from "@console-look/validators/cli-inputs";
 import { prettifyError } from "zod";
 
-export function processInputs({
-  command,
-  options,
-}: ReturnType<typeof parseInputs>) {
-  if (
-    command.length === 1 &&
-    (command[0] === "--help" || command[0] === "-h")
-  ) {
-    printUsage();
-    process.exit(0);
-  }
-
-  const validationResult = CliInputsSchema.safeParse({ command, options });
+export function validateInputs(inputs: ReturnType<typeof parseInputs>) {
+  const validationResult = CliInputsSchema.safeParse(inputs);
 
   if (!validationResult.success) {
     console.error(prettifyError(validationResult.error));
