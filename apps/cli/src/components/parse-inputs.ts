@@ -29,8 +29,8 @@ export function parseInputs() {
       command: args.slice(delimiterIndex + 1),
       options: parseOptions(args.slice(0, delimiterIndex)),
     };
-  } catch (err) {
-    handleCliError(err);
+  } catch (error) {
+    handleCliError(error);
     process.exit(1);
   }
 }
@@ -40,10 +40,9 @@ function parseOptions(cliArgs: string[]) {
     args: cliArgs,
     options: {
       title: { type: "string", short: "t" },
-      stream: {
+      "no-stream": {
         type: "boolean",
-        short: "s",
-        default: DEFAULT_CLI_OPTIONS.stream,
+        default: DEFAULT_CLI_OPTIONS["no-stream"],
       },
     },
     strict: true,
@@ -53,11 +52,11 @@ function parseOptions(cliArgs: string[]) {
   return values;
 }
 
-function handleCliError(err: unknown) {
-  if (err instanceof Error) {
-    console.error(`❌ ${err.message}\n`);
+function handleCliError(error: unknown) {
+  if (error instanceof Error) {
+    console.error(`${error.message}\n`);
   } else {
-    console.error("❌ Invalid command-line arguments\n");
+    console.error("Invalid command-line arguments\n");
   }
 
   printUsage();

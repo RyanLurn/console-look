@@ -6,7 +6,7 @@ Usage:
 
 Options:
   -t, --title <string>     Title for this run
-  -s, --stream             Stream logs live (default: true)
+  --no-stream              Don't stream logs live (default: false)
   -h, --help               Show this help message
 
 Example:
