@@ -9,6 +9,7 @@
   },
   "exports": {
     "./constants": "./src/utils/constants.ts",
+    "./print-issues": "./src/utils/print-issues.ts",
     "./cli-inputs": "./src/cli-inputs.ts"
   },
   "dependencies": {
