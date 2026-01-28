@@ -26,7 +26,7 @@ const server = Bun.serve({
 
         await Bun.write(
           join(DATABASE_DIRECTORY, "sessions", `${session.id}.json`),
-          JSON.stringify(session)
+          JSON.stringify(session, null, 2)
         );
 
         return Response.json({ sessionId: session.id });

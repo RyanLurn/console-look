@@ -1,0 +1,9 @@
+{
+  "command": ["npm", "test", "--runInBand"],
+  "options": {
+    "no-stream": false
+  },
+  "status": "running",
+  "timestamp": 1769607032349,
+  "id": "019c04cc-6e29-7000-98f2-bab9df0126df"
+}

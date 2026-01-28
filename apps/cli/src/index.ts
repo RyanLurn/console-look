@@ -1,9 +1,10 @@
 import { parseInputs } from "#components/parse-inputs";
 import { validateInputs } from "#components/validate-inputs";
-import { runCommand } from "#components/run-command";
+import { createSession } from "#components/create-session";
 
 const inputs = parseInputs();
 
 const validInputs = validateInputs(inputs);
 
-await runCommand(validInputs.command);
+const sessionId = await createSession(validInputs);
+console.log(sessionId);
