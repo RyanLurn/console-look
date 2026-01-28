@@ -39,6 +39,4 @@ const server = Bun.serve({
   },
 });
 
-export const url = server.url;
-
-console.log(`Server running at ${url}`);
+console.log(`Server running at ${server.url}`);

@@ -9,9 +9,6 @@
   "imports": {
     "#*": "./src/*.ts"
   },
-  "exports": {
-    ".": "./src/index.ts"
-  },
   "dependencies": {
     "@console-look/validators": "workspace:*",
     "zod": "catalog:"

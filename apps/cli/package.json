@@ -10,7 +10,6 @@
     "#*": "./src/*.ts"
   },
   "dependencies": {
-    "@console-look/api": "workspace:*",
     "@console-look/validators": "workspace:*",
     "zod": "catalog:"
   },
