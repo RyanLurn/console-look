@@ -7,6 +7,9 @@
   "imports": {
     "#*": "./src/*.ts"
   },
+  "exports": {
+    "./brand": "./src/brand.ts"
+  },
   "devDependencies": {
     "@console-look/tsconfigs": "workspace:*",
     "@types/bun": "catalog:types",
