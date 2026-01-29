@@ -13,7 +13,7 @@ export type FinalizeRunInput = {
 export const FinalizeRunOutputSchema = z.discriminatedUnion("success", [
   z.object({
     success: z.literal(true),
-    runId: z.string<RunId>(),
+    data: z.undefined(),
   }),
   z.object({ success: z.literal(false), error: z.string() }),
 ]);
@@ -26,18 +26,12 @@ export async function finalizeRun({
   exitCode,
 }: FinalizeRunInput) {
   try {
-    const updateResult = await db
+    await db
       .update(runTable)
       .set({ status, exitCode })
-      .where(eq(runTable.id, runId))
-      .returning({ runId: runTable.id });
+      .where(eq(runTable.id, runId));
 
-    if (updateResult.length === 1 && updateResult[0]) {
-      const firstResult = updateResult[0];
-      return { success: true, runId: firstResult.runId };
-    }
-
-    return { success: false, error: "Failed to finalize run" };
+    return { success: true, data: undefined };
   } catch (error) {
     if (error instanceof Error) {
       return { success: false, error: error.message };

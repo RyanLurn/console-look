@@ -5,7 +5,10 @@ import * as z from "zod";
 export type InsertChunkInput = typeof chunkTable.$inferInsert;
 
 export const InsertChunkOutputSchema = z.discriminatedUnion("success", [
-  z.object({ success: z.literal(true), chunkId: z.string<ChunkId>() }),
+  z.object({
+    success: z.literal(true),
+    data: z.object({ chunkId: z.string<ChunkId>() }),
+  }),
   z.object({ success: z.literal(false), error: z.string() }),
 ]);
 
@@ -20,7 +23,7 @@ export async function insertChunk(chunk: InsertChunkInput) {
 
     if (insertResult.length === 1 && insertResult[0]) {
       const firstResult = insertResult[0];
-      return { success: true, chunkId: firstResult.chunkId };
+      return { success: true, data: { chunkId: firstResult.chunkId } };
     }
 
     return { success: false, error: "Failed to insert chunk" };

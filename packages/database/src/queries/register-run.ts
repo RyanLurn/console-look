@@ -8,7 +8,7 @@ export type RegisterRunInput = typeof runTable.$inferInsert;
 export const RegisterRunOutputSchema = z.discriminatedUnion("success", [
   z.object({
     success: z.literal(true),
-    runId: z.string<RunId>(),
+    data: z.object({ runId: z.string<RunId>() }),
   }),
   z.object({ success: z.literal(false), error: z.string() }),
 ]);
@@ -26,7 +26,7 @@ export async function registerRun(
 
     if (insertResult.length === 1 && insertResult[0]) {
       const firstResult = insertResult[0];
-      return { success: true, runId: firstResult.runId };
+      return { success: true, data: { runId: firstResult.runId } };
     }
 
     return { success: false, error: "Failed to register run" };
