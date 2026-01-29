@@ -1,0 +1,47 @@
+import { db } from "#connect";
+import { runTable } from "#schema";
+import type { RunId } from "#schema";
+import { eq } from "drizzle-orm";
+import * as z from "zod";
+
+export type FinalizeRunInput = {
+  runId: RunId;
+  status: "finished" | "crashed";
+  exitCode: number;
+};
+
+export const FinalizeRunOutputSchema = z.discriminatedUnion("success", [
+  z.object({
+    success: z.literal(true),
+    runId: z.string<RunId>(),
+  }),
+  z.object({ success: z.literal(false), error: z.string() }),
+]);
+
+export type FinalizeRunOutput = z.infer<typeof FinalizeRunOutputSchema>;
+
+export async function finalizeRun({
+  runId,
+  status,
+  exitCode,
+}: FinalizeRunInput) {
+  try {
+    const updateResult = await db
+      .update(runTable)
+      .set({ status, exitCode })
+      .where(eq(runTable.id, runId))
+      .returning({ runId: runTable.id });
+
+    if (updateResult.length === 1 && updateResult[0]) {
+      const firstResult = updateResult[0];
+      return { success: true, runId: firstResult.runId };
+    }
+
+    return { success: false, error: "Failed to finalize run" };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "Failed to finalize run" };
+  }
+}
