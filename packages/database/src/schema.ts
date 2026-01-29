@@ -1,10 +1,14 @@
 import { timestamps } from "#utils/helpers/timestamps";
 import { text, sqliteTable, integer } from "drizzle-orm/sqlite-core";
+import type { Branded } from "@console-look/types/brand";
+
+export type RunId = Branded<string, "runId">;
 
 export const runTable = sqliteTable("runs", {
   id: text("id")
     .primaryKey()
-    .$default(() => Bun.randomUUIDv7()),
+    .$default(() => Bun.randomUUIDv7())
+    .$type<RunId>(),
   title: text("title"),
   noStream: integer({ mode: "boolean" }).notNull().default(false),
   command: text("command").notNull(),
@@ -16,13 +20,17 @@ export const runTable = sqliteTable("runs", {
   ...timestamps,
 });
 
+export type ChunkId = Branded<string, "chunkId">;
+
 export const chunkTable = sqliteTable("chunks", {
   id: text("id")
     .primaryKey()
-    .$default(() => Bun.randomUUIDv7()),
+    .$default(() => Bun.randomUUIDv7())
+    .$type<ChunkId>(),
   runId: text("run_id")
     .notNull()
-    .references(() => runTable.id),
+    .references(() => runTable.id)
+    .$type<RunId>(),
   sequenceNumber: integer("sequence_number").notNull(),
   channel: text("channel", { enum: ["stdout", "stderr"] }).notNull(),
   filePath: text("file_path").notNull(),

@@ -1,14 +1,15 @@
 import { db } from "#connect";
 import { runTable } from "#schema";
-import { createInsertSchema } from "drizzle-zod";
+import type { RunId } from "#schema";
 import * as z from "zod";
 
-export const RegisterRunInputSchema = createInsertSchema(runTable);
-
-export type RegisterRunInput = z.infer<typeof RegisterRunInputSchema>;
+export type RegisterRunInput = typeof runTable.$inferInsert;
 
 export const RegisterRunOutputSchema = z.discriminatedUnion("success", [
-  z.object({ success: z.literal(true), runId: z.string() }),
+  z.object({
+    success: z.literal(true),
+    runId: z.string<RunId>(),
+  }),
   z.object({ success: z.literal(false), error: z.string() }),
 ]);
 

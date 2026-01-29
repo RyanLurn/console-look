@@ -1,14 +1,11 @@
 import { db } from "#connect";
-import { chunkTable } from "#schema";
-import { createInsertSchema } from "drizzle-zod";
+import { chunkTable, type ChunkId } from "#schema";
 import * as z from "zod";
 
-export const InsertChunkInputSchema = createInsertSchema(chunkTable);
-
-export type InsertChunkInput = z.infer<typeof InsertChunkInputSchema>;
+export type InsertChunkInput = typeof chunkTable.$inferInsert;
 
 export const InsertChunkOutputSchema = z.discriminatedUnion("success", [
-  z.object({ success: z.literal(true), chunkId: z.string() }),
+  z.object({ success: z.literal(true), chunkId: z.string<ChunkId>() }),
   z.object({ success: z.literal(false), error: z.string() }),
 ]);
 
