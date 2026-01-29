@@ -1,4 +1,4 @@
-import { jsDateInSQLite } from "#utils/js-date";
+import { jsDateInSQLite } from "#utils/helpers/js-date";
 import { integer } from "drizzle-orm/sqlite-core";
 
 export const timestamps = {

@@ -1,4 +1,4 @@
-import { timestamps } from "#utils/timestamps";
+import { timestamps } from "#utils/helpers/timestamps";
 import { text, sqliteTable, integer } from "drizzle-orm/sqlite-core";
 
 export const runTable = sqliteTable("runs", {
