@@ -13,6 +13,8 @@
     "apps/api": {
       "name": "@console-look/api",
       "dependencies": {
+        "@console-look/bucket": "workspace:*",
+        "@console-look/database": "workspace:*",
         "@console-look/validators": "workspace:*",
         "zod": "catalog:",
       },

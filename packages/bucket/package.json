@@ -7,6 +7,9 @@
   "imports": {
     "#*": "./src/*.ts"
   },
+  "exports": {
+    "./local": "./src/local/*.ts"
+  },
   "dependencies": {
     "zod": "catalog:"
   },

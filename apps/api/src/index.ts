@@ -1,35 +1,30 @@
-import { DATABASE_DIRECTORY } from "#utils/constants";
-import { SessionSchema } from "@console-look/validators/database-schema";
 import { printIssues } from "@console-look/validators/print-issues";
-import { join } from "node:path";
+import {
+  registerRun,
+  RegisterRunInputSchema,
+} from "@console-look/database/queries/register-run";
 
 const server = Bun.serve({
   routes: {
     "/": new Response("OK"),
-    "/session": {
+    "/runs": {
       POST: async (request) => {
-        const body = await request.json();
+        const requestBody = await request.json();
 
-        const validationResult = SessionSchema.omit({ id: true }).safeParse(
-          body
-        );
+        const validationResult = RegisterRunInputSchema.safeParse(requestBody);
 
         if (!validationResult.success) {
           printIssues(validationResult.error);
           return new Response("Invalid request", { status: 400 });
         }
 
-        const session = {
-          ...validationResult.data,
-          id: Bun.randomUUIDv7(),
-        };
+        const registerRunResult = await registerRun(validationResult.data);
 
-        await Bun.write(
-          join(DATABASE_DIRECTORY, "sessions", `${session.id}.json`),
-          JSON.stringify(session, null, 2)
-        );
+        if (!registerRunResult.success) {
+          return new Response(registerRunResult.error, { status: 500 });
+        }
 
-        return Response.json({ sessionId: session.id });
+        return Response.json({ runId: registerRunResult.data.runId });
       },
     },
   },
