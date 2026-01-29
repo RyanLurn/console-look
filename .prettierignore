@@ -5,7 +5,7 @@ yarn.lock
 bun.lock
 
 # Generated files
-**/database/migrations
+**/migrations
 **/routeTree.gen.ts
 
 # Notes:
