@@ -38,3 +38,7 @@ try.js
 try.ts
 try-*.js
 try-*.ts
+
+# local database
+*.sqlite
+*.db
