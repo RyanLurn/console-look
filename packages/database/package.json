@@ -1,0 +1,23 @@
+{
+  "name": "@console-look/database",
+  "type": "module",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.0",
+    "@t3-oss/env-core": "catalog:",
+    "drizzle-orm": "^0.45.1",
+    "drizzle-zod": "^0.8.3",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@console-look/tsconfigs": "workspace:*",
+    "@types/bun": "catalog:types",
+    "drizzle-kit": "^0.31.8",
+    "typescript": "catalog:"
+  }
+}
