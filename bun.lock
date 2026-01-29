@@ -60,6 +60,14 @@
     "packages/tsconfigs": {
       "name": "@console-look/tsconfigs",
     },
+    "packages/types": {
+      "name": "@console-look/types",
+      "devDependencies": {
+        "@console-look/tsconfigs": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/validators": {
       "name": "@console-look/validators",
       "dependencies": {
@@ -90,6 +98,8 @@
     "@console-look/database": ["@console-look/database@workspace:packages/database"],
 
     "@console-look/tsconfigs": ["@console-look/tsconfigs@workspace:packages/tsconfigs"],
+
+    "@console-look/types": ["@console-look/types@workspace:packages/types"],
 
     "@console-look/validators": ["@console-look/validators@workspace:packages/validators"],
 
