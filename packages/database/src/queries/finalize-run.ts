@@ -4,11 +4,13 @@ import type { RunId } from "#schema";
 import { eq } from "drizzle-orm";
 import * as z from "zod";
 
-export type FinalizeRunInput = {
-  runId: RunId;
-  status: "finished" | "crashed";
-  exitCode: number;
-};
+export const FinalizeRunInputSchema = z.object({
+  runId: z.string<RunId>(),
+  status: z.enum(["finished", "crashed"]),
+  exitCode: z.number(),
+});
+
+export type FinalizeRunInput = z.infer<typeof FinalizeRunInputSchema>;
 
 export const FinalizeRunOutputSchema = z.discriminatedUnion("success", [
   z.object({

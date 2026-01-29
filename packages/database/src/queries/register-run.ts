@@ -1,9 +1,26 @@
 import { db } from "#connect";
-import { runTable } from "#schema";
+import { runTable, statusEnum } from "#schema";
 import type { RunId } from "#schema";
+import { MAX_TITLE_LENGTH } from "#utils/constants";
 import * as z from "zod";
 
-export type RegisterRunInput = typeof runTable.$inferInsert;
+export const RegisterRunInputSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, { error: "Title cannot be empty" })
+    .max(MAX_TITLE_LENGTH, {
+      error: (issues) => {
+        return `Title is too long (${issues.input?.length} characters). Maximum allowed is ${MAX_TITLE_LENGTH}.`;
+      },
+    }),
+  noStream: z.boolean().default(false),
+  command: z.string().trim().min(1, { error: "Command cannot be empty" }),
+  status: z.enum(statusEnum).default("running"),
+  clientTimestamp: z.number().positive(),
+});
+
+export type RegisterRunInput = z.infer<typeof RegisterRunInputSchema>;
 
 export const RegisterRunOutputSchema = z.discriminatedUnion("success", [
   z.object({

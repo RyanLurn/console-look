@@ -1,8 +1,16 @@
 import { db } from "#connect";
-import { chunkTable, type ChunkId } from "#schema";
+import { channelEnum, chunkTable, type ChunkId, type RunId } from "#schema";
 import * as z from "zod";
 
-export type InsertChunkInput = typeof chunkTable.$inferInsert;
+export const InsertChunkInputSchema = z.object({
+  runId: z.string<RunId>(),
+  sequenceNumber: z.number(),
+  channel: z.enum(channelEnum),
+  filePath: z.string(),
+  clientTimestamp: z.number(),
+});
+
+export type InsertChunkInput = z.infer<typeof InsertChunkInputSchema>;
 
 export const InsertChunkOutputSchema = z.discriminatedUnion("success", [
   z.object({
