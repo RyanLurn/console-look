@@ -44,6 +44,9 @@
     },
     "packages/bucket": {
       "name": "@console-look/bucket",
+      "dependencies": {
+        "zod": "catalog:",
+      },
       "devDependencies": {
         "@console-look/tsconfigs": "workspace:*",
         "@types/bun": "catalog:types",
