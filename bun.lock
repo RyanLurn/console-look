@@ -42,6 +42,14 @@
         "typescript": "catalog:",
       },
     },
+    "packages/bucket": {
+      "name": "@console-look/bucket",
+      "devDependencies": {
+        "@console-look/tsconfigs": "workspace:*",
+        "@types/bun": "catalog:types",
+        "typescript": "catalog:",
+      },
+    },
     "packages/database": {
       "name": "@console-look/database",
       "dependencies": {
@@ -92,6 +100,8 @@
   },
   "packages": {
     "@console-look/api": ["@console-look/api@workspace:apps/api"],
+
+    "@console-look/bucket": ["@console-look/bucket@workspace:packages/bucket"],
 
     "@console-look/cli": ["@console-look/cli@workspace:apps/cli"],
 

@@ -1,0 +1,15 @@
+{
+  "name": "@console-look/bucket",
+  "type": "module",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "imports": {
+    "#*": "./src/*.ts"
+  },
+  "devDependencies": {
+    "@console-look/tsconfigs": "workspace:*",
+    "@types/bun": "catalog:types",
+    "typescript": "catalog:"
+  }
+}
