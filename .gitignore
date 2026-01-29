@@ -42,3 +42,6 @@ try-*.ts
 # local database
 *.sqlite
 *.db
+
+# local bucket
+local-bucket
