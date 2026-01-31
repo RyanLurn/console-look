@@ -20,6 +20,7 @@
       },
       "devDependencies": {
         "@console-look/tsconfigs": "workspace:*",
+        "@console-look/types": "workspace:*",
         "@types/bun": "catalog:types",
         "typescript": "catalog:",
       },
