@@ -10,6 +10,7 @@ export const ChunkIdSchema = z.custom<Branded<string, "ChunkId">>((value) => {
   }
   return true;
 });
+
 export const ChunkSchema = z.object({
   text: z.string(),
   seq: z.int().positive(), // Stand for "sequence number"
@@ -25,6 +26,8 @@ export const RunIdSchema = z.custom<Branded<string, "RunId">>((value) => {
   }
   return true;
 });
+export type RunId = z.infer<typeof RunIdSchema>;
+
 export const RunSchema = z.object({
   title: z
     .string()
