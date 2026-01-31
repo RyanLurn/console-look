@@ -4,7 +4,7 @@ import * as z from "zod";
 const MAX_TITLE_LENGTH = 120;
 
 export const ChunkIdSchema = z.custom<Branded<string, "ChunkId">>((value) => {
-  const validationResult = z.uuidv7().safeParse(value);
+  const validationResult = z.uuidv4().safeParse(value);
   if (!validationResult.success) {
     return false;
   }
@@ -19,8 +19,11 @@ export const ChunkSchema = z.object({
 });
 export type Chunk = z.infer<typeof ChunkSchema>;
 
+export const ChunksSchema = z.record(ChunkIdSchema, ChunkSchema);
+export type Chunks = z.infer<typeof ChunksSchema>;
+
 export const RunIdSchema = z.custom<Branded<string, "RunId">>((value) => {
-  const validationResult = z.uuidv7().safeParse(value);
+  const validationResult = z.uuidv4().safeParse(value);
   if (!validationResult.success) {
     return false;
   }
@@ -37,7 +40,8 @@ export const RunSchema = z.object({
       error: (issues) => {
         return `Title is too long (${issues.input?.length} characters). Maximum allowed is ${MAX_TITLE_LENGTH}.`;
       },
-    }),
+    })
+    .optional(),
   command: z.string().trim().min(1, { error: "Command cannot be empty" }),
   status: z.enum(["running", "finished"]),
   chunks: z.record(ChunkIdSchema, ChunkSchema),

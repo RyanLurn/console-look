@@ -1,49 +1,92 @@
-import { printIssues } from "@console-look/validators/print-issues";
+import { cache } from "#cache";
 import {
-  registerRun,
-  RegisterRunInputSchema,
-} from "@console-look/database/queries/register-run";
-import { InsertChunkInputSchema } from "@console-look/database/queries/insert-chunk";
+  ChunkSchema,
+  ChunksSchema,
+  RunIdSchema,
+  RunSchema,
+  type RunId,
+} from "#utils/schemas";
+import * as z from "zod";
+
+const WebSocketDataSchema = z.discriminatedUnion("role", [
+  z.object({
+    role: z.literal("publisher"),
+    runId: RunIdSchema,
+    run: RunSchema,
+  }),
+  z.object({
+    role: z.literal("subscriber"),
+    runId: RunIdSchema,
+  }),
+]);
+
+type WebSocketData = z.infer<typeof WebSocketDataSchema>;
 
 const server = Bun.serve({
   routes: {
-    "/": new Response("OK"),
-    "/runs": {
-      POST: async (request) => {
-        const requestBody = await request.json();
+    "/ws/publisher/:runId": async (request, server) => {
+      const { runId } = request.params;
+      const validateRunIdResult = RunIdSchema.safeParse(runId);
+      if (!validateRunIdResult.success) {
+        return new Response("Invalid run ID", { status: 400 });
+      }
 
-        const validationResult = RegisterRunInputSchema.safeParse(requestBody);
+      const body = await request.json();
+      const validateRunResult = RunSchema.safeParse(body);
+      if (!validateRunResult.success) {
+        return new Response("Invalid request", { status: 400 });
+      }
 
-        if (!validationResult.success) {
-          printIssues(validationResult.error);
-          return new Response("Invalid request", { status: 400 });
-        }
+      const websocketData: WebSocketData = {
+        role: "publisher",
+        runId: validateRunIdResult.data,
+        run: validateRunResult.data,
+      };
 
-        const registerRunResult = await registerRun(validationResult.data);
-
-        if (!registerRunResult.success) {
-          return new Response(registerRunResult.error, { status: 500 });
-        }
-
-        return Response.json({ runId: registerRunResult.data.runId });
-      },
-    },
-    "/runs/:id/chunks": {
-      POST: async (request) => {
-        const { id } = request.params;
-
-        const sequenceNumber = parseInt(
-          request.headers.get("x-sequence-number") || "0"
-        );
-
-        return Response.json({ success: true });
-      },
+      if (server.upgrade(request, { data: websocketData })) {
+        return; // do not return a Response
+      }
+      return new Response("Upgrade failed", { status: 500 });
     },
   },
+  websocket: {
+    data: {} as WebSocketData,
+    open: (ws) => {
+      if (ws.data.role === "publisher") {
+        console.log("A wild publisher appeared!");
+        cache.set(ws.data.runId, ws.data.run);
+      } else {
+        console.log("A wild subscriber appeared!");
+        ws.subscribe(ws.data.runId);
+      }
+    },
+    message: (ws, message) => {
+      if (ws.data.role === "publisher") {
+        const jsonMessage = JSON.parse(message.toString());
 
-  fetch(_req) {
-    return new Response("Not Found", { status: 404 });
+        const validateChunksResult = z
+          .object({ chunks: z.array(ChunkSchema) })
+          .safeParse(jsonMessage);
+        if (!validateChunksResult.success) {
+          ws.send(JSON.stringify({ error: "Invalid message" }));
+          return;
+        }
+        const { chunks } = validateChunksResult.data;
+
+        if (!cache.has(ws.data.runId)) {
+          ws.send(JSON.stringify({ error: "Run not found" }));
+          return;
+        }
+
+        const run = cache.get(ws.data.runId)!;
+        run.chunks = { ...run.chunks, ...chunks };
+        cache.set(ws.data.runId, run);
+      }
+    },
+    close: (ws, code, message) => {
+      console.log("Client disconnected");
+    },
   },
 });
 
-console.log(`Server running at ${server.url}`);
+console.log(`API server is running at ${server.url}`);
