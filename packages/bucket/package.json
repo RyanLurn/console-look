@@ -8,7 +8,8 @@
     "#*": "./src/*.ts"
   },
   "exports": {
-    "./local": "./src/local/*.ts"
+    "./local/read": "./src/local/read.ts",
+    "./local/write": "./src/local/write.ts"
   },
   "dependencies": {
     "zod": "catalog:"

@@ -3,6 +3,7 @@ import {
   registerRun,
   RegisterRunInputSchema,
 } from "@console-look/database/queries/register-run";
+import { InsertChunkInputSchema } from "@console-look/database/queries/insert-chunk";
 
 const server = Bun.serve({
   routes: {
@@ -25,6 +26,17 @@ const server = Bun.serve({
         }
 
         return Response.json({ runId: registerRunResult.data.runId });
+      },
+    },
+    "/runs/:id/chunks": {
+      POST: async (request) => {
+        const { id } = request.params;
+
+        const sequenceNumber = parseInt(
+          request.headers.get("x-sequence-number") || "0"
+        );
+
+        return Response.json({ success: true });
       },
     },
   },
