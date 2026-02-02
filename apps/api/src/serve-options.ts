@@ -1,0 +1,38 @@
+import { API_SERVER_PORT } from "#utils/constants";
+import type { Serve } from "bun";
+
+export const serveOptions: Serve.Options<undefined> = {
+  port: API_SERVER_PORT,
+  routes: {
+    "/health": new Response("OK"),
+    "/ingest": {
+      POST: async (request) => {
+        console.log("Client connected");
+
+        if (request.body instanceof ReadableStream) {
+          const reader = request.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+              break;
+            }
+
+            const text = decoder.decode(value);
+            process.stdout.write(text);
+          }
+
+          console.log("\nClient disconnected");
+
+          return new Response("OK");
+        }
+
+        return new Response("Request body is required", { status: 400 });
+      },
+    },
+  },
+  fetch() {
+    return new Response("Not Found", { status: 404 });
+  },
+};
