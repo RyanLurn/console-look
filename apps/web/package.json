@@ -2,11 +2,8 @@
   "name": "@console-look/web",
   "type": "module",
   "scripts": {
-    "start": "bun run src/index.ts",
+    "dev": "bunx --bun vite dev",
     "check-types": "tsc --noEmit"
-  },
-  "imports": {
-    "#*": "./src/*.ts"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.157.18",
