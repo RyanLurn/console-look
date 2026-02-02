@@ -25,6 +25,7 @@
   "devDependencies": {
     "lefthook": "^2.0.16",
     "prettier": "3.8.1",
-    "prettier-plugin-curly": "0.4.1"
+    "prettier-plugin-curly": "0.4.1",
+    "prettier-plugin-tailwindcss": "0.7.2"
   }
 }
