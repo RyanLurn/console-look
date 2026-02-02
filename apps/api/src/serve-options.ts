@@ -2,61 +2,62 @@ import { cache } from "#cache";
 import { API_SERVER_PORT } from "#utils/constants";
 import type { Serve } from "bun";
 
+const subscribers = new Set<(chunk: Uint8Array) => void>();
+
 export const serveOptions: Serve.Options<undefined> = {
   port: API_SERVER_PORT,
+  idleTimeout: 60,
   routes: {
     "/health": new Response("OK"),
     "/ingest": {
-      POST: async (request) => {
-        console.log("Client connected");
+      POST: async (req) => {
+        console.log("Ingest connected");
 
-        if (request.body instanceof ReadableStream) {
-          cache.isDone = false;
-          cache.logs.clear();
-
-          const reader = request.body.getReader();
-          const decoder = new TextDecoder();
-
-          while (true) {
-            const { value, done } = await reader.read();
-            if (done) {
-              cache.isDone = true;
-              break;
-            }
-
-            const text = decoder.decode(value);
-            cache.logs.add(text);
-          }
-
-          console.log("\nClient disconnected");
-
-          return new Response("OK");
+        if (!(req.body instanceof ReadableStream)) {
+          return new Response("No body", { status: 400 });
         }
 
-        return new Response("Request body is required", { status: 400 });
+        const reader = req.body.getReader();
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
+
+          // Fanout immediately
+          for (const sub of subscribers) {
+            sub(value);
+          }
+        }
+
+        console.log("Ingest disconnected");
+        return new Response("OK");
       },
     },
+
     "/consume": {
-      GET: async () => {
-        const sentLogs = new Set<string>();
+      GET: () => {
+        console.log("Consumer connected");
 
         const stream = new ReadableStream({
-          type: "direct",
-          pull(controller) {
-            while (!cache.isDone) {
-              const newLogs = cache.logs.difference(sentLogs);
+          start(controller) {
+            const handler = (chunk: Uint8Array) => controller.enqueue(chunk);
+            subscribers.add(handler);
 
-              for (const log of newLogs) {
-                controller.write(log);
-                sentLogs.add(log);
-              }
-            }
-
-            controller.close();
+            return () => {
+              subscribers.delete(handler);
+              console.log("Consumer disconnected");
+            };
           },
         });
 
-        return new Response(stream);
+        return new Response(stream, {
+          headers: {
+            "Content-Type": "text/plain",
+            "Transfer-Encoding": "chunked",
+          },
+        });
       },
     },
   },

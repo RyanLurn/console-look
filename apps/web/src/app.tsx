@@ -14,22 +14,17 @@ export function App() {
     }
     started.current = true;
 
-    const unmountController = new AbortController();
-
     async function consumeStream() {
+      console.log("Start consuming stream");
       setIsStreaming(true);
       setChunks([]);
 
       try {
-        const response = await fetch("/api/consume", {
-          signal: unmountController.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error(`[${response.status}] ${response.statusText}`);
-        }
+        console.log("Fetching stream");
+        const response = await fetch("/api/consume");
 
         if (response.body) {
+          console.log("Response body is a ReadableStream");
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
 
@@ -40,6 +35,7 @@ export function App() {
             }
 
             const chunk = decoder.decode(value, { stream: true });
+            console.log("received:", chunk.trim());
             setChunks((prev) => [...prev, chunk]);
           }
         }
@@ -54,13 +50,16 @@ export function App() {
           setErrorMessage("An unknown error occurred");
         }
       } finally {
+        console.log("End consuming stream");
         setIsStreaming(false);
       }
     }
 
     consumeStream();
 
-    return () => unmountController.abort();
+    return () => {
+      console.log("Unmounting");
+    };
   }, []);
 
   const containerClassName = "flex h-dvh flex-col items-center gap-4 mt-4";
