@@ -11,17 +11,21 @@ export const serveOptions: Serve.Options<undefined> = {
         console.log("Client connected");
 
         if (request.body instanceof ReadableStream) {
+          cache.isDone = false;
+          cache.logs.clear();
+
           const reader = request.body.getReader();
           const decoder = new TextDecoder();
 
           while (true) {
             const { value, done } = await reader.read();
             if (done) {
+              cache.isDone = true;
               break;
             }
 
             const text = decoder.decode(value);
-            cache.add(text);
+            cache.logs.add(text);
           }
 
           console.log("\nClient disconnected");
