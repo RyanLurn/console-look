@@ -1,8 +1,13 @@
-import { cache } from "#cache";
 import { API_SERVER_PORT } from "#utils/constants";
 import type { Serve } from "bun";
 
-const subscribers = new Set<(chunk: Uint8Array) => void>();
+const consumer: {
+  enqueue: (chunk: Uint8Array) => void;
+  close: () => void;
+} = {
+  enqueue: () => {},
+  close: () => {},
+};
 
 export const serveOptions: Serve.Options<undefined> = {
   port: API_SERVER_PORT,
@@ -22,13 +27,12 @@ export const serveOptions: Serve.Options<undefined> = {
         while (true) {
           const { value, done } = await reader.read();
           if (done) {
+            consumer.close();
             break;
           }
 
           // Fanout immediately
-          for (const sub of subscribers) {
-            sub(value);
-          }
+          consumer.enqueue(value);
         }
 
         console.log("Ingest disconnected");
@@ -42,12 +46,10 @@ export const serveOptions: Serve.Options<undefined> = {
 
         const stream = new ReadableStream({
           start(controller) {
-            const handler = (chunk: Uint8Array) => controller.enqueue(chunk);
-            subscribers.add(handler);
-
-            return () => {
-              subscribers.delete(handler);
+            consumer.enqueue = (chunk: Uint8Array) => controller.enqueue(chunk);
+            consumer.close = () => {
               console.log("Consumer disconnected");
+              controller.close();
             };
           },
         });
