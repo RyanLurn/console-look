@@ -1,3 +1,4 @@
+import { cache } from "#cache";
 import { API_SERVER_PORT } from "#utils/constants";
 import type { Serve } from "bun";
 
@@ -20,7 +21,7 @@ export const serveOptions: Serve.Options<undefined> = {
             }
 
             const text = decoder.decode(value);
-            process.stdout.write(text);
+            cache.add(text);
           }
 
           console.log("\nClient disconnected");
