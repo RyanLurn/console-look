@@ -21,7 +21,7 @@ export function App() {
       setChunks([]);
 
       try {
-        const response = await fetch("http://localhost:3000/consume", {
+        const response = await fetch("/api/consume", {
           signal: unmountController.signal,
         });
 
