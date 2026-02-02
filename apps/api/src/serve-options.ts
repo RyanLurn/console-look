@@ -36,6 +36,29 @@ export const serveOptions: Serve.Options<undefined> = {
         return new Response("Request body is required", { status: 400 });
       },
     },
+    "/consume": {
+      GET: async () => {
+        const sentLogs = new Set<string>();
+
+        const stream = new ReadableStream({
+          type: "direct",
+          pull(controller) {
+            while (!cache.isDone) {
+              const newLogs = cache.logs.difference(sentLogs);
+
+              for (const log of newLogs) {
+                controller.write(log);
+                sentLogs.add(log);
+              }
+            }
+
+            controller.close();
+          },
+        });
+
+        return new Response(stream);
+      },
+    },
   },
   fetch() {
     return new Response("Not Found", { status: 404 });
