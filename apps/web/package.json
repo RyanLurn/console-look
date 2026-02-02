@@ -8,9 +8,19 @@
   "imports": {
     "#*": "./src/*.ts"
   },
+  "dependencies": {
+    "@tanstack/react-router": "^1.157.18",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
   "devDependencies": {
     "@console-look/tsconfigs": "workspace:*",
+    "@tanstack/router-plugin": "^1.157.18",
     "@types/bun": "catalog:types",
-    "typescript": "catalog:"
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "catalog:",
+    "vite": "^7.3.1"
   }
 }
