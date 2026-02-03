@@ -14,14 +14,10 @@
     "apps/api": {
       "name": "@console-look/api",
       "dependencies": {
-        "@console-look/bucket": "workspace:*",
-        "@console-look/database": "workspace:*",
-        "@console-look/validators": "workspace:*",
         "zod": "catalog:",
       },
       "devDependencies": {
         "@console-look/tsconfigs": "workspace:*",
-        "@console-look/types": "workspace:*",
         "@types/bun": "catalog:types",
         "typescript": "catalog:",
       },
