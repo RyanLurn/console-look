@@ -12,7 +12,9 @@
       "packages/*"
     ],
     "catalog": {
-      "typescript": "^5.9.3"
+      "@t3-oss/env-core": "^0.13.10",
+      "typescript": "^5.9.3",
+      "zod": "^4.3.6"
     },
     "catalogs": {
       "types": {
@@ -23,6 +25,7 @@
   "devDependencies": {
     "lefthook": "^2.0.16",
     "prettier": "3.8.1",
-    "prettier-plugin-curly": "0.4.1"
+    "prettier-plugin-curly": "0.4.1",
+    "prettier-plugin-tailwindcss": "0.7.2"
   }
 }

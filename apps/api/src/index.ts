@@ -1,11 +1,5 @@
-const server = Bun.serve({
-  routes: {
-    "/": new Response("OK"),
-  },
+import { serveOptions } from "#serve-options";
 
-  fetch(_req) {
-    return new Response("Not Found", { status: 404 });
-  },
-});
+const server = Bun.serve(serveOptions);
 
-console.log(`Server running at ${server.url}`);
+console.log(`API server is running at ${server.url}`);

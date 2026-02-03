@@ -1,5 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/prettierrc",
   "trailingComma": "es5",
-  "plugins": ["prettier-plugin-curly"]
+  "plugins": ["prettier-plugin-curly", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./apps/web/src/styles.css",
+  "tailwindFunctions": ["clsx", "cn", "tw", "twMerge", "cva"]
 }

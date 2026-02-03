@@ -3,10 +3,14 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
+    "try": "bun run tests/try.ts",
     "check-types": "tsc --noEmit"
   },
   "imports": {
     "#*": "./src/*.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@console-look/tsconfigs": "workspace:*",
